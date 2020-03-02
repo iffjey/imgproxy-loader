@@ -7,7 +7,7 @@ const { getProcessingOptionsPath } = require('./options')
 const sign = require('./sign')
 const schema = require('./schema.json')
 
-module.exports = function loader(content) {
+function loader(content) {
   let options = getOptions(this) || {}
 
   validateOptions(schema, options, {
@@ -64,4 +64,5 @@ module.exports = function loader(content) {
   return `module.exports = ${JSON.stringify(result)};`
 }
 
+module.exports.default = loader
 module.exports.raw = true

@@ -4,6 +4,7 @@
     "space-before-function-paren": "off",
     "template-curly-spacing": "off",
     "camelcase": "off",
-    "multiline-ternary": "off"
+    "multiline-ternary": "off",
+    "no-invalid-this": "off"
   }
 }

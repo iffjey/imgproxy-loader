@@ -14,22 +14,29 @@ const {
 } = require('./utils')
 
 function typecast(options) {
-  return [...options].map(({ key, value }) => {
+  function typecastValue(name, value) {
     switch (true) {
-      case STRING_OPTIONS.includes(key):
+      case STRING_OPTIONS.includes(name):
         return String(value)
-      case INT_OPTIONS.includes(key):
+      case INT_OPTIONS.includes(name):
         return parseInt(value, 10)
-      case FLOAT_OPTIONS.includes(key):
+      case FLOAT_OPTIONS.includes(name):
         return parseFloat(value)
-      case ARRAY_OPTIONS.includes(key):
+      case ARRAY_OPTIONS.includes(name):
         return wrapArray(value)
-      case BOOL_OPTIONS.includes(key):
+      case BOOL_OPTIONS.includes(name):
         return value && value !== '0' ? 1 : 0
       default:
-        throw new Error(`${key} option is not supported`)
+        throw new Error(`${name} option is not supported`)
     }
-  })
+  }
+
+  return Object.assign(
+    {},
+    ...Object.entries(options).map(([name, value]) => ({
+      [name]: typecastValue(value)
+    }))
+  )
 }
 
 function groupCropOptions(options) {
