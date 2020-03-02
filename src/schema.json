@@ -1,0 +1,71 @@
+{
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "key": {
+      "description": "The key for signing imgproxy-url",
+      "type": "string"
+    },
+    "salt": {
+      "description": "The salt for signing imgproxy-url",
+      "type": "string"
+    },
+    "url": {
+      "description": "imgproxy url",
+      "type": "string"
+    },
+    "plain": {
+      "description": "Enables/disables base64 encoding for url",
+      "type": "boolean"
+    },
+    "name": {
+      "description": "The filename template for the target file(s).",
+      "type": "string"
+    },
+    "outputPath": {
+      "description": "A filesystem path where the target file(s) will be placed.",
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "instanceof": "Function"
+        }
+      ]
+    },
+    "publicPath": {
+      "description": "A custom public path for the target file(s).",
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "instanceof": "Function"
+        }
+      ]
+    },
+    "context": {
+      "description": "A custom file context.",
+      "type": "string"
+    },
+    "emitFile": {
+      "description": "Enables/Disables emit files.",
+      "type": "boolean"
+    },
+    "regExp": {
+      "description": "A Regular Expression to one or many parts of the target file path. The capture groups can be reused in the name property using [N] placeholder.",
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "instanceof": "RegExp"
+        }
+      ]
+    },
+    "esModule": {
+      "description": "By default, file-loader generates JS modules that use the ES modules syntax.",
+      "type": "boolean"
+    }
+  }
+}
