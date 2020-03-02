@@ -34,7 +34,7 @@ function typecast(options) {
   return Object.assign(
     {},
     ...Object.entries(options).map(([name, value]) => ({
-      [name]: typecastValue(value)
+      [name]: typecastValue(name, value)
     }))
   )
 }
