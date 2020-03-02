@@ -15,7 +15,8 @@
   "author": "Evgenii Shkodin <iffjey@evilmartians.com>",
   "repository": "iffjey/imgproxy-loader",
   "scripts": {
-    "lint:js": "$(yarn bin)/eslint \"./src/*.js\""
+    "lint:js": "$(yarn bin)/eslint \"./src/*.js\"",
+    "test": "jest --forceExit --runInBand --coverage"
   },
   "dependencies": {
     "loader-utils": "^1.4.0"
