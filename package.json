@@ -14,6 +14,9 @@
   "license": "MIT",
   "author": "Evgenii Shkodin <iffjey@evilmartians.com>",
   "repository": "iffjey/imgproxy-loader",
+  "scripts": {
+    "lint:js": "$(yarn bin)/eslint \"./src/*.js\""
+  },
   "dependencies": {
     "loader-utils": "^1.4.0"
   },

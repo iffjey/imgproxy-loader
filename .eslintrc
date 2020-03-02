@@ -1,0 +1,9 @@
+{
+  "extends": "@logux/eslint-config",
+  "rules": {
+    "space-before-function-paren": "off",
+    "template-curly-spacing": "off",
+    "camelcase": "off",
+    "multiline-ternary": "off"
+  }
+}
