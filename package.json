@@ -13,6 +13,7 @@
   },
   "license": "MIT",
   "author": "Evgenii Shkodin <iffjey@evilmartians.com>",
+  "main": "src/cjs.js",
   "repository": "iffjey/imgproxy-loader",
   "scripts": {
     "lint:js": "$(yarn bin)/eslint \"./src/*.js\"",
