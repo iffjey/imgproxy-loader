@@ -63,3 +63,5 @@ module.exports = function loader(content) {
 
   return `module.exports = ${JSON.stringify(result)};`
 }
+
+module.exports.raw = true
