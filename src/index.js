@@ -1,6 +1,7 @@
-const { getOptions, interpolateName, parseQuery } = require('loader-utils')
+const { getOptions, parseQuery } = require('loader-utils')
 const validateOptions = require('schema-utils')
 const path = require('path')
+const fileLoader = require('file-loader')
 
 const { mergeUrl, urlSafeBase64 } = require('./utils')
 const { getProcessingOptionsPath } = require('./options')
@@ -15,53 +16,40 @@ function loader(content) {
     baseDataPath: 'options'
   })
 
-  let context = options.context || this.rootContext
+  let query
 
-  let url = interpolateName(this, options.name || '[contenthash].[ext]', {
-    context,
-    content,
-    regExp: options.regExp
-  })
+  if (this.resourceQuery) {
+    let { key, salt, url: imgproxyUrl, plain, ...restOptions } = options
 
-  let outputPath = url
+    query = {
+      ...restOptions,
+      publicPath: (url, resourcePath, context) => {
+        let publicPath
 
-  if (options.outputPath) {
-    if (typeof options.outputPath === 'function') {
-      outputPath = options.outputPath(url, this.resourcePath, context)
-    } else {
-      outputPath = path.posix.join(options.outputPath, url)
+        if (typeof restOptions.publicPath === 'function') {
+          publicPath = restOptions.publicPath(url, resourcePath, context)
+        } else {
+          publicPath = mergeUrl(restOptions.publicPath, url)
+        }
+
+        let processingOptions = parseQuery(this.resourceQuery)
+
+        let sourceUrl = plain
+          ? path.posix.join('plain', publicPath)
+          : urlSafeBase64(publicPath)
+
+        let processingOptionsPath = getProcessingOptionsPath(processingOptions)
+        let target = path.posix.join('/', processingOptionsPath, sourceUrl)
+        let signature = sign(salt, target, key)
+        let pathname = path.posix.join(signature, target)
+        let result = mergeUrl(imgproxyUrl, pathname)
+
+        return result
+      }
     }
   }
 
-  if (typeof options.emitFile === 'undefined' || options.emitFile) {
-    this.emitFile(outputPath, content)
-  }
-
-  let publicPath
-
-  if (typeof options.publicPath === 'function') {
-    publicPath = options.publicPath(url, this.resourcePath, context)
-  } else {
-    publicPath = mergeUrl(options.publicPath, url)
-  }
-
-  if (!this.resourceQuery) {
-    return `module.exports = ${JSON.stringify(publicPath)};`
-  }
-
-  let processingOptions = parseQuery(this.resourceQuery)
-
-  let sourceUrl = options.plain
-    ? path.posix.join('plain', publicPath)
-    : urlSafeBase64(publicPath)
-
-  let processingOptionsPath = getProcessingOptionsPath(processingOptions)
-  let target = path.posix.join('/', processingOptionsPath, sourceUrl)
-  let signature = sign(options.salt, target, options.key)
-  let pathname = path.posix.join(signature, target)
-  let result = mergeUrl(options.url, pathname)
-
-  return `module.exports = ${JSON.stringify(result)};`
+  return fileLoader.bind(query ? { ...this, query } : this)(content)
 }
 
 module.exports.default = loader
